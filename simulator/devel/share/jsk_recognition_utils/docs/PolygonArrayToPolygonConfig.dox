@@ -1,6 +1,0 @@
-\subsubsection parameters ROS parameters
-
-Reads and maintains the following parameters on the ROS server
-
-- \b "~index" : \b [int] Index where the polygon is extracted from polygon array. min: -2147483648, default: -1, max: 2147483647
-

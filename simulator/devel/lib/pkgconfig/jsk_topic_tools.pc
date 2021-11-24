@@ -1,8 +1,0 @@
-prefix=/home/wlyu/ROS_workspace/devel
-
-Name: jsk_topic_tools
-Description: Description of jsk_topic_tools
-Version: 2.2.11
-Cflags: -I/home/wlyu/ROS_workspace/devel/include -I/home/wlyu/ROS_workspace/src/POLARIS_GEM_e2/polaris_gem_simulator/jsk_rviz/jsk_topic_tools/include
-Libs: -L${prefix}/lib -ljsk_topic_tools
-Requires: topic_tools message_runtime nodelet std_msgs std_srvs roscpp rostime

@@ -1,8 +1,0 @@
-prefix=/home/wlyu/ROS_workspace/install
-
-Name: jsk_rviz_plugins
-Description: Description of jsk_rviz_plugins
-Version: 2.1.7
-Cflags: -I${prefix}/include
-Libs: -L${prefix}/lib -ljsk_rviz_plugins
-Requires: jsk_hark_msgs jsk_footstep_msgs jsk_recognition_utils cv_bridge people_msgs image_geometry rviz

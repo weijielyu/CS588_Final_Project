@@ -1,8 +1,0 @@
-prefix=/home/wlyu/ROS_workspace/devel
-
-Name: jsk_hark_msgs
-Description: Description of jsk_hark_msgs
-Version: 4.3.2
-Cflags: -I/home/wlyu/ROS_workspace/devel/include
-Libs: -L${prefix}/lib 
-Requires: std_msgs

@@ -1,1 +1,0 @@
-/usr/bin/cc -fPIC   -shared  -o /home/wlyu/ROS_workspace/devel/lib/python3/dist-packages/jsk_recognition_utils/nms.so CMakeFiles/nms.dir/nms.c.o  -lpython3.8 
