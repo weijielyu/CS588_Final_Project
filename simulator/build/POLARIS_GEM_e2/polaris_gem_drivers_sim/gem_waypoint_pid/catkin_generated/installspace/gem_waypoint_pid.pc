@@ -1,0 +1,8 @@
+prefix=/home/wlyu/ROS_workspace/install
+
+Name: gem_waypoint_pid
+Description: Description of gem_waypoint_pid
+Version: 0.0.1
+Cflags: 
+Libs: -L${prefix}/lib 
+Requires: 

@@ -1,0 +1,8 @@
+prefix=/home/wlyu/ROS_workspace/install
+
+Name: jsk_recognition_utils
+Description: Description of jsk_recognition_utils
+Version: 1.2.15
+Cflags: -I${prefix}/include
+Libs: -L${prefix}/lib -ljsk_recognition_utils
+Requires: jsk_recognition_msgs pcl_ros visualization_msgs message_runtime

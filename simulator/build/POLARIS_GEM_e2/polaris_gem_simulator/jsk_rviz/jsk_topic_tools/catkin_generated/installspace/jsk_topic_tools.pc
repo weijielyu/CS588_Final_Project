@@ -1,0 +1,8 @@
+prefix=/home/wlyu/ROS_workspace/install
+
+Name: jsk_topic_tools
+Description: Description of jsk_topic_tools
+Version: 2.2.11
+Cflags: -I${prefix}/include
+Libs: -L${prefix}/lib -ljsk_topic_tools
+Requires: topic_tools message_runtime nodelet std_msgs std_srvs roscpp rostime

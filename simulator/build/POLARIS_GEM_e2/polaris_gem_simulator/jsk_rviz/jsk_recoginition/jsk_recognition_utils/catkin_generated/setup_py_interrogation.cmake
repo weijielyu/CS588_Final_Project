@@ -1,0 +1,7 @@
+set(jsk_recognition_utils_SETUP_PY_SETUP_MODULE "setuptools")
+set(jsk_recognition_utils_SETUP_PY_VERSION "1.2.15")
+set(jsk_recognition_utils_SETUP_PY_SCRIPTS "")
+set(jsk_recognition_utils_SETUP_PY_PACKAGES "jsk_recognition_utils")
+set(jsk_recognition_utils_SETUP_PY_PACKAGE_DIRS "python/jsk_recognition_utils")
+set(jsk_recognition_utils_SETUP_PY_MODULES "")
+set(jsk_recognition_utils_SETUP_PY_MODULE_DIRS "")

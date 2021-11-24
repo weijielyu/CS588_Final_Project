@@ -1,0 +1,7 @@
+set(jsk_topic_tools_SETUP_PY_SETUP_MODULE "distutils.core")
+set(jsk_topic_tools_SETUP_PY_VERSION "2.2.11")
+set(jsk_topic_tools_SETUP_PY_SCRIPTS "")
+set(jsk_topic_tools_SETUP_PY_PACKAGES "jsk_topic_tools")
+set(jsk_topic_tools_SETUP_PY_PACKAGE_DIRS "src/jsk_topic_tools")
+set(jsk_topic_tools_SETUP_PY_MODULES "")
+set(jsk_topic_tools_SETUP_PY_MODULE_DIRS "")

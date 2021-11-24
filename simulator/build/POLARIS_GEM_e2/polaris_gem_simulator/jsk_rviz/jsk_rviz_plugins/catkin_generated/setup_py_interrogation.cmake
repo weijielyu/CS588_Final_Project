@@ -1,0 +1,7 @@
+set(jsk_rviz_plugins_SETUP_PY_SETUP_MODULE "distutils.core")
+set(jsk_rviz_plugins_SETUP_PY_VERSION "2.1.7")
+set(jsk_rviz_plugins_SETUP_PY_SCRIPTS "")
+set(jsk_rviz_plugins_SETUP_PY_PACKAGES "jsk_rviz_plugins")
+set(jsk_rviz_plugins_SETUP_PY_PACKAGE_DIRS "python/jsk_rviz_plugins")
+set(jsk_rviz_plugins_SETUP_PY_MODULES "")
+set(jsk_rviz_plugins_SETUP_PY_MODULE_DIRS "")

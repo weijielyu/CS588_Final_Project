@@ -1,0 +1,8 @@
+prefix=/home/wlyu/ROS_workspace/install
+
+Name: gem_pure_pursuit_sim
+Description: Description of gem_pure_pursuit_sim
+Version: 1.0.0
+Cflags: 
+Libs: -L${prefix}/lib 
+Requires: 
