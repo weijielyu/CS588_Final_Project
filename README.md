@@ -19,5 +19,3 @@ This directory contains scripts for the final project of course *UIUC CS-588 Aut
 **Simulator Setup**
 
 'https://gist.github.com/Xiaoming-Zhao/b0ec2ad7c7390e31beab4c4a9451200d'
-
-## Reference
