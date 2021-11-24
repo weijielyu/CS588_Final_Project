@@ -22,6 +22,4 @@ This directory contains scripts for the final project of course *UIUC CS-588 Aut
 
 ## Reference
 
-* Codes in `simulator/src/POLARIS_GEM_e2` is cloned from
-
-`https://github.com/hangcui1201/POLARIS_GEM_e2`
+* Codes in `simulator/src/POLARIS_GEM_e2` is cloned from `https://github.com/hangcui1201/POLARIS_GEM_e2`
