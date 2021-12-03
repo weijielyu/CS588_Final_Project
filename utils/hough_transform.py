@@ -19,7 +19,7 @@ def get_lines(img):
     
     return lines
 
-cv2.imwrite('houghlines3.jpg',img)
+# cv2.imwrite('houghlines3.jpg',img)
 
 def get_lines_prob(img):
     gray = cv2.cvtColor(img,cv2.COLOR_BGR2GRAY)
