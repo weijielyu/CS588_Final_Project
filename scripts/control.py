@@ -1,3 +1,5 @@
+# The mathematical formula is from the paper 汽车偏离车道线的图像分析与视觉计算方法 by MAO Yuxing, etc
+
 import numpy as np
 
 class Controller:
