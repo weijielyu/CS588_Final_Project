@@ -1,16 +1,26 @@
 import cv2
+import numpy as np
 from utils.hough_transform import get_lines, get_lines_prob
 
 
-img = cv2.imread("images/image.jpeg")
-lines = get_lines(img)
-print(lines)
+img = cv2.imread("images/oneline.jpeg")
+lines = get_lines_prob(img)
+print(lines.shape)
 
-# for (x1,y1,x2,y2) in lines:
-#     print(x1)
-#     cv2.line(img,(x1,y1),(x2,y2),(0,255,0),2)
+for x1,y1,x2,y2 in lines[0]:
+    cv2.line(img,(x1,y1),(x2,y2),(0,0, 255),2)
+
+# for rho,theta in lines[0]:
+#     a = np.cos(theta)
+#     b = np.sin(theta)
+#     x0 = a*rho
+#     y0 = b*rho
+#     x1 = int(x0 + 1000*(-b))
+#     y1 = int(y0 + 1000*(a))
+#     x2 = int(x0 - 1000*(-b))
+#     y2 = int(y0 - 1000*(a))
+
+#     cv2.line(img,(x1,y1),(x2,y2),(0,0,255),2)
     
-# for [line] in lines:
-#     cv2.line(img,(line[0], line[1]), (line[2], line[3]),(0,255,0),2)
     
-# cv2.imwrite("out.jpeg", img)    
+cv2.imwrite("out.jpeg", img)    
