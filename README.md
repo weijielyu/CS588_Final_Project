@@ -27,3 +27,6 @@ https://urldefense.com/v3/__https://docs.google.com/spreadsheets/d/1OU09DqIKY_4q
 https://gist.github.com/Xiaoming-Zhao/b0ec2ad7c7390e31beab4c4a9451200d
 
 ## Reference
+
+* MAO Yuxing,MIAO Jialue,WANG Quanlin et al. Image analysis and vision computing methods for running deflection of vehicles[J]. CEA, 2013, 49(22): 167-172.
+
