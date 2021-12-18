@@ -68,10 +68,14 @@ class DetectorManager:
         try:
             if self.i == 0:
                 self.cv_image = self.bridge.imgmsg_to_cv2(data, "rgb8")
+                
+                
+                
                 image_vis = cv2.resize(self.cv_image, (1280, 720), interpolation=cv2.INTER_LINEAR)
                 image_vis[0:500, :] = [0,0,0]
                 image = cv2.resize(self.cv_image, (1280, 720), interpolation=cv2.INTER_LINEAR)
                 image[0:500, :] = [0,0,0]
+                
                 image = image / 127.5 - 1.0
                 # LOG.info('Image load complete, cost time: {:.5f}s'.format(time.time() - t_start))
 
