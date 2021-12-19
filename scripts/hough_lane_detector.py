@@ -92,10 +92,14 @@ class HoughDetector(Detector):
         # for k in lines_dict.keys():
         #     clustered_lines.append(lines_dict[k][0])
         # return clustered_lines
-        return lines[0]
+        self._draw_lines(lines[0])
+        rho = lines[0][0][0]
+        theta = lines[0][0][1]
+        k = np.sin(theta) / np.cos(theta)
+        b = - rho / np.cos(theta)
+        return k, b
     
     def _draw_lines(self, lines):
-        print(lines)
         if len(lines) != 0:
             # for rho, theta in lines:
             for [rho, theta] in lines:
@@ -124,8 +128,7 @@ class HoughDetector(Detector):
         self._preprocess()
         self._detect_edge()
         self._get_masked_image()
-        lines = self._get_lines()
-        self._draw_lines(lines)
+        k, b = self._get_lines()
         
         return self.output_image
     
