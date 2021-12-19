@@ -5,8 +5,26 @@ import numpy as np
 class Controller:
     def __init__(self) -> None:
         self.theta = 9.25 * np.pi / 180                # The depression angle of camera
-        self.h = 1.65    0.08                  # The height of camera
-        self.f =                       # focus length
+        self.h = 1.59 - 0.08                  # The height of camera
+        self.fx = 
+        self.fy = 
+        self.cy = 
+    
+        # self.f =                       # focus length
+        
+            
+    def translate(self, u, v):
+        tmp1 = self.cy * np.sin(self.theta) - v * np.sin(self.theta) - self.fy * np.cos(self.theta)
+        tmp2 = self.h * tmp1
+        tmp3 = self.fy * np.sin(self.theta) - v * np.cos(self.theta) + self.cy * np.cos(self.theta)
+        z = tmp2 / tmp3
+        
+        tmp4 = -self.h * (u - self.cx) * self.fy
+        tmp5 = tmp3 * self.fx
+        x = tmp4 / tmp5
+        
+        return(z, x)        
+        
         
         
     def get_position(self, m, n):
@@ -24,3 +42,5 @@ class Controller:
         d = tmp3 / tmp4
         
         return beta, d
+
+    
