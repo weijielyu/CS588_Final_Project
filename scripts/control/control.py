@@ -4,8 +4,8 @@ import numpy as np
 
 class Controller:
     def __init__(self) -> None:
-        self.theta = 15                # The depression angle of camera
-        self.h = 1.65                  # The height of camera
+        self.theta = 9.25 * np.pi / 180                # The depression angle of camera
+        self.h = 1.65    0.08                  # The height of camera
         self.f =                       # focus length
         
         

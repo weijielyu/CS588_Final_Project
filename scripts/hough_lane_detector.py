@@ -12,12 +12,12 @@ def empty_dir(dir_path):
 class HoughDetector(Detector):
     def __init__(self) -> None:
         super().__init__()
-        self.canny_lthreshold = 150
-        self.canny_hthreshold = 250
+        self.canny_lthreshold = 300
+        self.canny_hthreshold = 500
         self.rho = 1
         self.theta = np.pi/180
         self.threshold = 40
-        self.min_line_length = 120
+        self.min_line_length = 200
         self.max_line_gap = 50
         self.image_size = (1280, 720)
         self.mask_level = 520
@@ -92,20 +92,21 @@ class HoughDetector(Detector):
         # for k in lines_dict.keys():
         #     clustered_lines.append(lines_dict[k][0])
         # return clustered_lines
-        return lines
+        return lines[0]
     
     def _draw_lines(self, lines):
+        print(lines)
         if len(lines) != 0:
             # for rho, theta in lines:
-            for [[rho, theta]] in lines:
+            for [rho, theta] in lines:
                 a = np.cos(theta)
                 b = np.sin(theta)
                 x0 = a * rho
                 y0 = b * rho
-                x1 = int(x0 + 1000*(-b))
-                y1 = int(y0 + 1000*(a))
-                x2 = int(x0 - 1000*(-b))
-                y2 = int(y0 - 1000*(a))
+                x1 = int(x0 + 3000*(-b))
+                y1 = int(y0 + 3000*(a))
+                x2 = int(x0 - 3000*(-b))
+                y2 = int(y0 - 3000*(a))
                 self.output_image = cv2.line(self.origin_image,(x1,y1),(x2,y2),(0,0,255),2)
         else:
             print("No lanes detected in image ", self.image_name)
@@ -129,7 +130,7 @@ class HoughDetector(Detector):
         return self.output_image
     
 def main():
-    input_dir_path = "../inputs"
+    input_dir_path = "../inputs/inputs3"
     my_detector = HoughDetector()
     for img_path in os.listdir(input_dir_path):
         if ".png" in img_path:
