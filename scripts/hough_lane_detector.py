@@ -95,8 +95,8 @@ class HoughDetector(Detector):
         self._draw_lines(lines[0])
         rho = lines[0][0][0]
         theta = lines[0][0][1]
-        k = np.sin(theta) / np.cos(theta)
-        b = - rho / np.cos(theta)
+        k = np.cos(theta) / np.sin(theta)
+        b =  rho / np.sin(theta)
         return k, b
     
     def _draw_lines(self, lines):
@@ -129,8 +129,10 @@ class HoughDetector(Detector):
         self._detect_edge()
         self._get_masked_image()
         k, b = self._get_lines()
+        # print("k:", k)
+        # print("b:", b)
         
-        return self.output_image
+        return k, b
     
 def main():
     input_dir_path = "../inputs/inputs3"
