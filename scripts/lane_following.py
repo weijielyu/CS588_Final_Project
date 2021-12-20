@@ -5,8 +5,6 @@ from std_msgs.msg import String, Bool, Float32, Float64
 from cv_bridge import CvBridge
 from cv_bridge import CvBridgeError
 
-from __future__ import print_function
-
 # Python Headers
 import math
 import scipy.signal as signal
@@ -100,7 +98,7 @@ import numpy as np
 
 class Coodinate_transfer:
     def __init__(self) -> None:
-        self.theta = 9.25 * np.pi / 180                # The depression angle of camera
+        self.theta = -9.25 * np.pi / 180                # The depression angle of camera
         self.h = 1.59 - 0.08                  # The height of camera
         self.fx = 1046.17936/1920*1280
         self.fy = 1051.07316/1080*720
@@ -139,15 +137,18 @@ class Coodinate_transfer:
 
 class DetectorManager:
     def __init__(self):
-        self.rate       = rospy.Rate(1)
+        self.rate       = rospy.Rate(7)
         self.wheelbase  = 1.75 # meters
         self.offset     = 0.46 # meters
 
         # define subscriber
+        self.image_topic =  '/mako_1/mako_1/image_raw'
         self.enable_sub = rospy.Subscriber("/pacmod/as_tx/enable", Bool, self.enable_callback)      
         self.image_sub = rospy.Subscriber(self.image_topic, Image, self.imageCb, queue_size = 1) 
         self.speed_sub  = rospy.Subscriber("/pacmod/as_tx/vehicle_speed", Float64, self.speed_callback)
         self.speed      = 0.0
+        self.z = 0
+        self.x = 0
 
         self.olat       = 40.0928563
         self.olon       = -88.2359994
@@ -160,9 +161,8 @@ class DetectorManager:
         self.speed_filter  = OnlineFilter(1.2, 30, 4)
 
         self.bridge = CvBridge()
-        self.image_topic =  '/mako_1/mako_1/image_raw'
         self.Coodinate_transfer = Coodinate_transfer()
-        self.postprocess_result = 0
+        self.filtered_fit_params = 0
         # define detector
         self.input_tensor = tf.placeholder(dtype=tf.float32, shape=[1, 720, 1280, 3], name='input_tensor')
         self.net = lanenet.LaneNet(phase='test', cfg=CFG)
@@ -280,32 +280,24 @@ class DetectorManager:
                         [self.binary_seg_ret, self.instance_seg_ret],
                         feed_dict={self.input_tensor: [image]}
                     )
-                    self.postprocess_result = self.postprocessor.postprocess(
+                    postprocess_result = self.postprocessor.postprocess(
                         binary_seg_result=binary_seg_image[0],
                         instance_seg_result=instance_seg_image[0],
                         source_image=image_vis
                     )
-                print(self.postprocess_result['fit_params']) # k, b, max(nonzero_y), min(nonzero_y)
-                # fit_params = np.array(self.postprocess_result['fit_params'])
-                # index = np.where(fit_params[])
-                filtered_line_fit_params = []
-                for line_fit_params in self.postprocess_result['fit_params']:
-                    if line_fit_params[4] >= 350 and line_fit_params[4] <= 1050:
-                        filtered_line_fit_params.append(line_fit_params)
-                print(len(filtered_line_fit_params))
-                if len(filtered_line_fit_params) == 2:
-                    u = 0
-                    v = 0
-                    for i in filtered_line_fit_params:
-                        u += i[5]
-                        v += i[3]
-                    z,x = self.Coodinate_transfer.transfer(u//2,v//2)
-                    print(z,x)
-            self.i += 1
-            print(self.i)
-            t_cost = time.time() - t_start
-            print('Single imgae cost time: {:.5f}s'.format(t_cost))
-            if self.i == 8:
+                # print(postprocess_result['fit_params']) # k, b, y_near, y_far, fit_x_near, fix_x_far
+                fit_params = np.array(postprocess_result['fit_params'])
+                if fit_params != []:
+                    index = np.where((fit_params[:,4] >= 350)  & (fit_params[:,4] <= 1100)  & (fit_params[:,2] >=600))
+                    self.filtered_fit_params = fit_params[index[0]]
+                else:
+                    self.filtered_fit_params = []
+                print(self.filtered_fit_params)
+                t_cost = time.time() - t_start
+                # print('Single imgae cost time: {:.5f}s'.format(t_cost))
+                self.start_pp()
+            self.i += 1          
+            if self.i == 1:
                 self.i = 0
 
         except CvBridgeError as e:
@@ -346,23 +338,43 @@ class DetectorManager:
                     print("Gas Engaged!")
 
                     self.gem_enable = True
-            # for line_fit_params in self.postprocess_result['fit_params']:
 
-            # v = 
-            # z,x = self.Coodinate_transfer.transfer(u,v)
-            # finding the distance between the goal point and the vehicle
-            # true look-ahead distance between a waypoint and current position
-            L = self.dist_arr[self.goal]
+            if self.filtered_fit_params.shape[0] == 2:
+                v = int(np.mean(self.filtered_fit_params[:,3]))
+                u = int(np.mean(self.filtered_fit_params[:,5]))
+                # print(u,v)
+                z,x = self.Coodinate_transfer.transfer(u,v)
+                self.z = z
+                self.x = x
+                print(z,x)
 
+            elif self.filtered_fit_params.shape[0] == 1:
+                z_far,x_far = self.Coodinate_transfer.transfer(self.filtered_fit_params[0,5],self.filtered_fit_params[0,3])
+                z_near,x_near = self.Coodinate_transfer.transfer(self.filtered_fit_params[0,4],self.filtered_fit_params[0,2])
+                k = (z_far-z_near)/(x_far-x_near)
+                theta = np.arctan(-1/k)
+                if self.filtered_fit_params[0,4] <= 640: #left
+                    x = x_far + 1.4 * np.cos(theta)
+                    z = z_far + 1.4 * np.sin(theta)
+                else:
+                    x = x_far - 1.4 * np.cos(theta)
+                    z = z_far - 1.4 * np.sin(theta)
+                self.z = z
+                self.x = x
+                print(z,x)
+            else:
+                z = self.z
+                x = self.x
+            L = round(np.sqrt((z) ** 2 + (x) ** 2), 3)
             # find the curvature and the angle 
-            alpha = self.heading_to_yaw(self.path_points_heading[self.goal]) - curr_yaw
-
+            alpha = -self.find_angle([0,1], [x,z]) # -?
+            print(alpha)
             # ----------------- tuning this part as needed -----------------
             k       = 0.41 
             angle_i = math.atan((k * 2 * self.wheelbase * math.sin(alpha)) / L) 
             angle   = angle_i*2
             # ----------------- tuning this part as needed -----------------
-
+            print(angle)
             f_delta = round(np.clip(angle, -0.61, 0.61), 3)
 
             f_delta_deg = np.degrees(f_delta)
@@ -387,27 +399,18 @@ class DetectorManager:
             current_time = rospy.get_time()
             filt_vel     = self.speed_filter.get_data(self.speed)
             output_accel = self.pid_speed.get_control(current_time, self.desired_speed - filt_vel)
-
+            print(output_accel)
             if output_accel > self.max_accel:
                 output_accel = self.max_accel
 
             if output_accel < 0.3:
                 output_accel = 0.3
 
-            if (f_delta_deg <= 30 and f_delta_deg >= -30):
-                self.turn_cmd.ui16_cmd = 1
-            elif(f_delta_deg > 30):
-                self.turn_cmd.ui16_cmd = 2 # turn left
-            else:
-                self.turn_cmd.ui16_cmd = 0 # turn right
-
-
-
             self.accel_cmd.f64_cmd = output_accel
             self.steer_cmd.angular_position = np.radians(steering_angle)
             self.accel_pub.publish(self.accel_cmd)
+            print('-----------------------------------')
             self.steer_pub.publish(self.steer_cmd)
-            self.turn_pub.publish(self.turn_cmd)
 
             self.rate.sleep()
 
@@ -417,6 +420,7 @@ def pure_pursuit():
     dm = DetectorManager()
 
     # try:
+    #     print('starting pp')
     #     dm.start_pp()
     # except rospy.ROSInterruptException:
     #     pass
