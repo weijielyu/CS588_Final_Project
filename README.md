@@ -11,6 +11,9 @@
 This directory contains scripts for the final project of course *UIUC CS-588 Autonomous Vehicle System Engineering*
 
 ## Links
+**Course Website**
+
+http://luthuli.cs.uiuc.edu/~daf/courses/MAAV-21/588-2021-home.html
 
 **Our Simulator Repo**
 
