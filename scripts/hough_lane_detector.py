@@ -16,7 +16,7 @@ class HoughDetector(Detector):
         self.canny_hthreshold = 500
         self.rho = 1
         self.theta = np.pi/180
-        self.threshold = 40
+        self.threshold = 55
         self.min_line_length = 200
         self.max_line_gap = 50
         self.image_size = (1280, 720)
@@ -60,49 +60,55 @@ class HoughDetector(Detector):
         mask = self._mask(vertices)
         self.masked_edges_image = cv2.bitwise_and(self.edges_image, mask)
         
-    def _cluster(self, lines):
+    def _cluster(self, params):
             """
             There are often multiple lines for a single lane detected by the hough 
             detector. We need to find out with lines are actually the same lane.
             We do this with clustering
             """
-            rho_threshold = 150
-            theta_threshold = 1
-            cluster_dict = {}    
-            for [[rho, theta]] in lines:
-                # print(rho, theta)
+            
+            k_threshold = 0.5
+            bar_threshold = 100
+            cluster_dict = {}
+            for (k, b) in params:
                 flag = False
-                for k in cluster_dict.keys():
-                    if abs(cluster_dict[k][0][0] - rho) < rho_threshold \
-                    and abs(cluster_dict[k][0][1] - theta) < theta_threshold:
-                        cluster_dict[k][1].append((rho, theta))
-                        cluster_dict[k][0] = np.mean(cluster_dict[k][1], axis=0)
+                for key in cluster_dict.keys():                    
+                    if abs(cluster_dict[key][0][0] - k) < k_threshold \
+                    and abs((k * self.image_size[0] / 2 + b) - (cluster_dict[key][0][0] * self.image_size[0] / 2 + cluster_dict[key][0][1])) < bar_threshold:
+                    # if abs(cluster_dict[key][0][0] - k) < k_threshold:
+                        cluster_dict[key][1].append((k, b))
+                        cluster_dict[key][0] = np.mean(cluster_dict[key][1], axis=0)
                         flag = True
                         break
                 if flag == False:
-                    cluster_dict[len(cluster_dict)] = [(rho, theta), [(rho, theta)]]
-                    
-            return cluster_dict
+                    cluster_dict[len(cluster_dict)] = [(k, b), [(k, b)]]
+            cluster_lines = []
+            for key in cluster_dict:
+                cluster_lines.append(cluster_dict[key][0]) 
+            return cluster_lines
         
     def _get_lines(self):
         # Do hough detection on the masked edges
         lines = cv2.HoughLines(self.masked_edges_image, self.rho, self.theta, self.threshold, self.min_line_length, self.max_line_gap)
-        # lines_dict = self._cluster(lines)
-        # clustered_lines = []
-        # for k in lines_dict.keys():
-        #     clustered_lines.append(lines_dict[k][0])
-        # return clustered_lines
-        self._draw_lines(lines[0])
-        rho = lines[0][0][0]
-        theta = lines[0][0][1]
-        k = np.cos(theta) / np.sin(theta)
-        b =  rho / np.sin(theta)
-        return k, b
+        params = []
+        # self._draw_lines_polar(lines)
+        for [[rho, theta]] in lines:
+            k = - np.cos(theta) / np.sin(theta)
+            b = rho / np.sin(theta)
+            # k = np.cos(theta) / np.sin(theta)
+            # b = rho / np.sin(theta)
+            params.append((k, b))
+        clustered_lines = self._cluster(params)
+        # clustered_lines = params
+        # print(clustered_lines)
+        self._draw_lines(clustered_lines)
+        # print(clustered_lines)
+        return clustered_lines
     
-    def _draw_lines(self, lines):
+    def _draw_lines_polar(self, lines):
         if len(lines) != 0:
             # for rho, theta in lines:
-            for [rho, theta] in lines:
+            for [[rho, theta]] in lines:
                 a = np.cos(theta)
                 b = np.sin(theta)
                 x0 = a * rho
@@ -111,6 +117,19 @@ class HoughDetector(Detector):
                 y1 = int(y0 + 3000*(a))
                 x2 = int(x0 - 3000*(-b))
                 y2 = int(y0 - 3000*(a))
+                self.output_image = cv2.line(self.origin_image,(x1,y1),(x2,y2),(0,0,255),2)
+        else:
+            print("No lanes detected in image ", self.image_name)
+    
+    def _draw_lines(self, lines):
+        if len(lines) != 0:
+            # for rho, theta in lines:
+            for (k, b) in lines:
+                # print(k, b)
+                x1 = int(-3000)
+                y1 = int(-3000 * k + b)
+                x2 = int(3000)
+                y2 = int(3000 * k + b)
                 self.output_image = cv2.line(self.origin_image,(x1,y1),(x2,y2),(0,0,255),2)
         else:
             print("No lanes detected in image ", self.image_name)
@@ -128,11 +147,7 @@ class HoughDetector(Detector):
         self._preprocess()
         self._detect_edge()
         self._get_masked_image()
-        k, b = self._get_lines()
-        # print("k:", k)
-        # print("b:", b)
-        
-        return k, b
+        return self._get_lines()
     
 def main():
     input_dir_path = "../inputs/inputs3"
