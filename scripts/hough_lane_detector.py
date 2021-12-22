@@ -41,6 +41,7 @@ class HoughDetector(Detector):
         # Canny edge detection
         gray = cv2.cvtColor(self.origin_image, cv2.COLOR_RGB2GRAY)
         self.edges_image = cv2.Canny(gray, self.canny_lthreshold, self.canny_hthreshold)
+        cv2.imwrite(os.path.join(self.out_dir, "edges", self.image_name), self.edges_image)
 
     def _mask(self, vertics):
         # Make a square mask to make the detector focus on the road area
@@ -59,6 +60,7 @@ class HoughDetector(Detector):
         vertices = np.array([left_bottom, right_bottom, right_top, left_top], np.int32)
         mask = self._mask(vertices)
         self.masked_edges_image = cv2.bitwise_and(self.edges_image, mask)
+        cv2.imwrite(os.path.join(self.out_dir, "mask", self.image_name), self.masked_edges_image)
         
     def _cluster(self, params):
             """
@@ -131,6 +133,7 @@ class HoughDetector(Detector):
                 x2 = int(3000)
                 y2 = int(3000 * k + b)
                 self.output_image = cv2.line(self.origin_image,(x1,y1),(x2,y2),(0,0,255),2)
+                cv2.imwrite(os.path.join(self.out_dir, "out", self.image_name), self.output_image)
         else:
             print("No lanes detected in image ", self.image_name)
         
@@ -157,7 +160,7 @@ def main():
             print("------", img_path, "------")
             image = cv2.imread(os.path.join(input_dir_path, img_path))
             my_detector.process_image(image, img_path)
-            my_detector.save_images()
+            # my_detector.save_images()
     
 if __name__ == "__main__":
     main()
