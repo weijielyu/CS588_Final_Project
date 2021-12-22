@@ -36,7 +36,7 @@ To reproduce the lane boundaries detection and lane following task
 ```
 python lanenet-lane-detection-master/lane_following.py
 ```
-For tuning parameters, visualize lane boundaries detection results. You need to make folders first according to `hough_lane_detection.py`
+For tuning parameters, visualizing lane boundaries detection results. You need to make folders first according to `hough_lane_detection.py`
 ```
 python scripts/hough_lane_detection.py
 ```
