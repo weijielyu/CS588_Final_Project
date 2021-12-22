@@ -34,7 +34,7 @@ roslaunch basic_launch gnss_sensor_init.launch
 ```
 To reproduce the lane boundaries detection and lane following task
 ```
-python scripts/lane_following.py
+python lanenet-lane-detection-master/lane_following.py
 ```
 For tuning parameters, visualize lane boundaries detection results. You need to make folders first according to `hough_lane_detection.py`
 ```
