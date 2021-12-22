@@ -1,4 +1,4 @@
-# CS588_Final_Project
+# Lane Boundaries Detection in Highbay Backlot
 
 ## About
 
