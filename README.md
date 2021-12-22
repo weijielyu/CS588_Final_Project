@@ -24,12 +24,12 @@ OpenCV-Python 4.5.4
 
 Vechile startups. In the first terminal, launch joystick controller
 ```
-source devel.setup.bash
+source devel/setup.bash
 roslaunch basic_launch dbw_joystick.launch
 ```
 Open another terminal, launch basic sensors
 ```
-source devel.setup.bash
+source devel/setup.bash
 roslaunch basic_launch gnss_sensor_init.launch
 ```
 To reproduce the lane boundaries detection and lane following task
