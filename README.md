@@ -12,7 +12,7 @@
 
 This directory contains scripts for the final project of course *UIUC CS-588 Autonomous Vehicle System Engineering*
 
-In this project, we used simply Canny edge-detection, Hough line detection and DBSCAN .etc algorithms successfully accomplished lane boundaries detection and lane following task in Highbay Backlot. Especially, our algorithm have significantly better performance than nowadays state-of-art CNN approaches on the sharp curved lanes.
+In this project, we used simply Canny edge-detection, Hough line detection and DBSCAN .etc algorithms, successfully accomplished lane boundaries detection and lane following task in Highbay Backlot. Especially, our algorithm have significantly better performance than nowadays state-of-art CNN approaches on the sharp curved lanes.
 
 ## Dependency
 
@@ -36,7 +36,6 @@ To reproduce the lane boundaries detection and lane following task
 ```
 python scripts/lane_following.py
 ```
-
 For tuning parameters, visualize lane boundaries detection results
 ```
 python scripts/hough_lane_detection.py
@@ -67,6 +66,8 @@ forked from https://github.com/hangcui1201/POLARIS_GEM_e2
 https://gist.github.com/Xiaoming-Zhao/b0ec2ad7c7390e31beab4c4a9451200d
 
 ## Reference
+
+* J. Canny, "A Computational Approach to Edge Detection," in IEEE Transactions on Pattern Analysis and Machine Intelligence, vol. PAMI-8, no. 6, pp. 679-698, Nov. 1986, doi: 10.1109/TPAMI.1986.4767851.
 
 * Neven, D., De Brabandere, B., Georgoulis, S., Proesmans, M., & Van Gool, L. (2018, June). Towards end-to-end lane detection: an instance segmentation approach. In 2018 IEEE intelligent vehicles symposium (IV) (pp. 286-291). IEEE.
 
