@@ -22,7 +22,7 @@ OpenCV-Python 4.5.4
 
 ## Usage
 
-Vechile startups. In the first terminal, launch joystick controller
+Vechile setup. In the first terminal, launch joystick controller
 ```
 source devel/setup.bash
 roslaunch basic_launch dbw_joystick.launch
