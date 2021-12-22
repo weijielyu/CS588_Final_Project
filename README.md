@@ -12,7 +12,7 @@
 
 This directory contains scripts for the final project of course *UIUC CS-588 Autonomous Vehicle System Engineering*
 
-In this project, we used simply Canny edge-detection, Hough line detection and DBSCAN .etc algorithms, successfully accomplished lane boundaries detection and lane following task in Highbay Backlot. Especially, our algorithm have significantly better performance than nowadays state-of-art CNN approaches on the sharp curved lanes.
+In this project, we used simply canny edge-detection, hough line detection and DBSCAN .etc algorithms, successfully accomplished lane boundaries detection and lane following task in highbay backlot. Especially, our algorithm has significantly better performance than nowadays state-of-art CNN approaches on the sharp curved lanes.
 
 ## Dependency
 
@@ -36,7 +36,7 @@ To reproduce the lane boundaries detection and lane following task
 ```
 python lanenet-lane-detection-master/lane_following.py
 ```
-For tuning parameters, visualizing lane boundaries detection results. You need to make folders first according to `hough_lane_detection.py`
+For tuning parameters, visualizing lane boundaries detection results. You need to first make folders according to `hough_lane_detection.py`
 ```
 python scripts/hough_lane_detection.py
 ```
