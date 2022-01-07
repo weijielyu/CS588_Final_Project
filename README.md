@@ -12,7 +12,7 @@
 
 This directory contains scripts for the final project of course *UIUC CS-588 Autonomous Vehicle System Engineering*
 
-In this project, we used simply canny edge-detection, hough line detection and DBSCAN .etc algorithms, successfully accomplished lane boundaries detection and lane following task in highbay backlot. Especially, our algorithm has significantly better performance than nowadays state-of-art CNN approaches on the sharp curved lanes.
+In this project, we used simply canny edge-detection, hough line detection and DBSCAN .etc algorithms, successfully accomplished lane boundaries detection and lane following task in highbay backlot. Especially, our algorithm has significantly better performance than nowadays state-of-art CNN approaches on the sharply curved lanes.
 
 ## Dependency
 
